@@ -8,7 +8,7 @@ const liquidacionesRoutes = require('./routes/liquidaciones');
 const usuariosRoutes = require('./routes/usuarios'); // <--- 1. Importamos la ruta de usuarios
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 // Middlewares (con límite aumentado a 10MB para permitir los logotipos en base64)
 app.use(cors());
