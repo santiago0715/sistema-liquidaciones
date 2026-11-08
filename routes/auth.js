@@ -102,11 +102,11 @@ router.put('/cambiar-password', async (req, res) => {
 });
 
 // 4. ELIMINAR USUARIO POR ID (Solo para administradores)
-router.delete('/users/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const deletedUser = await User.findByIdAndDelete(id);
-    
+
     if (!deletedUser) {
       return res.status(404).json({ message: 'Usuario no encontrado en la base de datos.' });
     }
@@ -116,7 +116,6 @@ router.delete('/users/:id', async (req, res) => {
     res.status(500).json({ message: 'Error en el servidor al eliminar el usuario', error: error.message });
   }
 });
-
 // 5. OBTENER LISTA DE USUARIOS (Para el panel de administración)
 router.get('/users', async (req, res) => {
   try {
