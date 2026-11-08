@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../config'; // <-- Usamos la instancia centralizada
 import { KeyRound, ShieldAlert } from 'lucide-react';
 
 export default function CambiarPasswordObligatorio() {
@@ -22,7 +22,7 @@ export default function CambiarPasswordObligatorio() {
 
     try {
       const userData = JSON.parse(localStorage.getItem('user'));
-      await axios.put('http://localhost:5000/api/auth/cambiar-password', {
+      await API.put('/api/auth/cambiar-password', {
         userId: userData.id,
         nuevaPassword
       });

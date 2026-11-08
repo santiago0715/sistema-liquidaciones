@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../config'; // <-- Usamos la instancia centralizada
 import { useNavigate, Link } from 'react-router-dom';
 import { FileText, DollarSign, User, CreditCard, Building2, ArrowLeft, CheckCircle2, AlertCircle, Plus, Trash2, Image as ImageIcon } from 'lucide-react';
 
@@ -41,7 +41,7 @@ export default function CrearLiquidacion() {
   });
 
   const [empresasGuardadas, setEmpresasGuardadas] = useState({});
-  const [trabajadoresGuardados, setTrabajadoresGuardados] = useState({}); // <--- NUEVO: Memoria de trabajadores
+  const [trabajadoresGuardados, setTrabajadoresGuardados] = useState({});
   const [bonosList, setBonosList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -51,7 +51,7 @@ export default function CrearLiquidacion() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/liquidaciones');
+        const res = await API.get('/api/liquidaciones');
         const unicasEmpresas = {};
         const unicosTrabajadores = {};
 
@@ -107,7 +107,6 @@ export default function CrearLiquidacion() {
       return;
     }
 
-    // Autocompletar Empresa y su Logo
     if (name === 'empresaRazonSocial') {
       const empresaEncontrada = empresasGuardadas[value];
       setFormData(prev => ({
@@ -119,7 +118,6 @@ export default function CrearLiquidacion() {
       return;
     }
 
-    // Autocompletar RUT de Trabajador al escribir su nombre
     if (name === 'trabajadorNombre') {
       const rutEncontrado = trabajadoresGuardados[value];
       setFormData(prev => ({
@@ -236,7 +234,7 @@ export default function CrearLiquidacion() {
         sueldoLiquido: sueldoLiquido
       };
 
-      await axios.post('http://localhost:5000/api/liquidaciones/crear', payload);
+      await API.post('/api/liquidaciones/crear', payload);
       setSuccess('¡Liquidación guardada con éxito!');
       
       setTimeout(() => {
@@ -365,7 +363,7 @@ export default function CrearLiquidacion() {
             </div>
           </div>
 
-          {/* Sección 2: Datos del Trabajador con Autocompletado */}
+          {/* Sección 2: Datos del Trabajador */}
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
             <h2 className="text-lg font-bold text-indigo-400 mb-4 flex items-center gap-2">
               <User className="h-5 w-5" /> 2. Datos del Trabajador y Asistencia

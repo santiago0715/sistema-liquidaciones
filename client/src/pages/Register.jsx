@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import API from '../config'; // <-- Usamos la instancia centralizada
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Lock, Mail, CreditCard, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
 
@@ -42,19 +42,18 @@ export default function Register() {
     setError('');
     setSuccess('');
 
-    // Validar que las contraseñas coincidan antes de enviar
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden. Por favor, verifíquelas.');
       return;
     }
 
     try {
-      await axios.post('http://localhost:5000/api/auth/register', {
+      await API.post('/api/auth/register', {
         nombre,
         rut,
         email,
         password,
-        rol: 'user' // Configurado como usuario normal por seguridad institucional
+        rol: 'user'
       });
 
       setSuccess('¡Usuario registrado con éxito! Redirigiendo al login...');
@@ -146,7 +145,6 @@ export default function Register() {
             </div>
           </div>
 
-          {/* Contraseña */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1">Contraseña</label>
             <div className="relative">
@@ -171,7 +169,6 @@ export default function Register() {
             </div>
           </div>
 
-          {/* Confirmar Contraseña */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1">Confirmar Contraseña</label>
             <div className="relative">

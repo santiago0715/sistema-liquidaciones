@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import API from '../config'; // <-- Usamos la instancia centralizada
 import { useNavigate, Link } from 'react-router-dom';
 import { FileText, ArrowLeft, Building2, User, Calendar, DollarSign, Eye, Trash2 } from 'lucide-react';
 
@@ -16,7 +16,7 @@ export default function HistorialLiquidaciones() {
 
   const fetchLiquidaciones = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/liquidaciones');
+      const response = await API.get('/api/liquidaciones');
       setLiquidaciones(response.data);
     } catch (err) {
       setError('Error al cargar el historial de liquidaciones.');
@@ -29,7 +29,7 @@ export default function HistorialLiquidaciones() {
   const handleDelete = async (id) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar esta liquidación?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/liquidaciones/${id}`);
+        await API.delete(`/api/liquidaciones/${id}`);
         setLiquidaciones(liquidaciones.filter(l => l._id !== id));
         if (trabajadorSeleccionado) {
           // Actualizar lista del trabajador seleccionado

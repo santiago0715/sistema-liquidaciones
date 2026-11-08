@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import API from '../config'; // Importa la instancia configurada con tu variable de entorno
 import { FileText, History, Shield, Users, UserPlus, AlertCircle, CheckCircle2, KeyRound } from 'lucide-react';
 
 export default function Dashboard() {
@@ -40,7 +40,7 @@ export default function Dashboard() {
 
   const fetchUsuarios = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/usuarios');
+      const res = await API.get('/api/usuarios');
       setUsuarios(res.data);
     } catch (err) {
       setError('No se pudo cargar la lista de usuarios.');
@@ -76,7 +76,7 @@ export default function Dashboard() {
     setError('');
     setSuccess('');
     try {
-      await axios.post('http://localhost:5000/api/usuarios/crear', nuevoUser);
+      await API.post('/api/usuarios/crear', nuevoUser);
       setSuccess('¡Cuenta de usuario creada con éxito!');
       setNuevoUser({ nombre: '', rut: '', email: '', password: '', rol: 'user' });
       fetchUsuarios();
@@ -87,7 +87,7 @@ export default function Dashboard() {
 
   const handleRoleChange = async (id, nuevoRol) => {
     try {
-      await axios.put(`http://localhost:5000/api/usuarios/${id}/rol`, { rol: nuevoRol });
+      await API.put(`/api/usuarios/${id}/rol`, { rol: nuevoRol });
       setSuccess('Rol actualizado correctamente');
       fetchUsuarios();
     } catch (err) {
@@ -101,7 +101,7 @@ export default function Dashboard() {
       try {
         setError('');
         setSuccess('');
-        const res = await axios.put(`http://localhost:5000/api/usuarios/${id}/reset-password`);
+        const res = await API.put(`/api/usuarios/${id}/reset-password`);
         setSuccess(res.data.message);
       } catch (err) {
         setError('Error al restablecer la contraseña.');

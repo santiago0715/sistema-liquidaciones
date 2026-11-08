@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import API from '../config'; // <-- Usamos la instancia centralizada
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Printer } from 'lucide-react';
 
@@ -12,7 +12,7 @@ export default function DetalleLiquidacion() {
   useEffect(() => {
     const fetchLiquidacion = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/liquidaciones/${id}`);
+        const response = await API.get(`/api/liquidaciones/${id}`);
         setLiquidacion(response.data);
       } catch (err) {
         setError('No se pudo cargar la liquidación solicitada.');

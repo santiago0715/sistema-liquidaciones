@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import API from '../config'; // Importa la instancia configurada con tu variable de entorno
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Lock, Mail, AlertCircle } from 'lucide-react';
 
@@ -42,7 +42,8 @@ export default function Login() {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      // Petición usando la instancia centralizada (apunta dinámicamente a Railway o localhost)
+      const response = await API.post('/api/auth/login', {
         email: identifier, // Envía el RUT formateado o el correo al backend
         password
       });
