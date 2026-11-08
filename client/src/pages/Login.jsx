@@ -9,32 +9,9 @@ export default function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Función para formatear el RUT automáticamente si el usuario comienza ingresando números
-  const formatRut = (value) => {
-    let clean = value.replace(/[^0-9kK@.]/g, '').toUpperCase();
-    
-    // Si contiene '@', asumimos que es un correo electrónico y no aplicamos formato de RUT
-    if (clean.includes('@')) {
-      return value;
-    }
-
-    let numbersOnly = clean.replace(/[^0-9kK]/g, '');
-    if (numbersOnly.length === 0) return '';
-
-    let cuerpo = numbersOnly.slice(0, -1);
-    let dv = numbersOnly.slice(-1);
-
-    if (cuerpo.length > 0) {
-      cuerpo = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-      return `${cuerpo}-${dv}`;
-    } else {
-      return dv;
-    }
-  };
-
   const handleIdentifierChange = (e) => {
-    const formatted = formatRut(e.target.value);
-    setIdentifier(formatted);
+    // Permite escribir libremente cualquier carácter (correos o RUTs)
+    setIdentifier(e.target.value);
   };
 
   const handleLogin = async (e) => {
@@ -44,7 +21,7 @@ export default function Login() {
     try {
       // Petición usando la instancia centralizada (apunta dinámicamente a Railway o localhost)
       const response = await API.post('/api/auth/login', {
-        email: identifier, // Envía el RUT formateado o el correo al backend
+        email: identifier, // Envía el identificador (correo o RUT) al backend
         password
       });
 
@@ -99,7 +76,7 @@ export default function Login() {
               <input
                 type="text"
                 required
-                maxLength={30}
+                maxLength={50}
                 className="block w-full rounded-lg border border-slate-300 bg-slate-50 pl-10 pr-4 py-2.5 text-slate-900 placeholder-slate-400 focus:border-indigo-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600/20 transition-all text-sm"
                 value={identifier}
                 onChange={handleIdentifierChange}
