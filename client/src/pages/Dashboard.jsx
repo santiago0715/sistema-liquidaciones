@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../config'; // Importa la instancia configurada con tu variable de entorno
-import { FileText, History, Shield, Users, UserPlus, AlertCircle, CheckCircle2, KeyRound } from 'lucide-react';
+import { FileText, History, Shield, Users, UserPlus, AlertCircle, CheckCircle2, KeyRound, Trash2 } from 'lucide-react';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -105,6 +105,21 @@ export default function Dashboard() {
         setSuccess(res.data.message);
       } catch (err) {
         setError('Error al restablecer la contraseña.');
+      }
+    }
+  };
+
+  // NUEVA FUNCIÓN: Eliminar usuario por ID
+  const handleDeleteUser = async (id, nombreUsuario) => {
+    if (window.confirm(`¿Estás seguro de que deseas eliminar permanentemente la cuenta de ${nombreUsuario}?`)) {
+      try {
+        setError('');
+        setSuccess('');
+        await API.delete(`/api/usuarios/${id}`);
+        setSuccess('Usuario eliminado correctamente del sistema.');
+        fetchUsuarios();
+      } catch (err) {
+        setError(err.response?.data?.message || 'Error al eliminar el usuario.');
       }
     }
   };
@@ -321,7 +336,7 @@ export default function Dashboard() {
                               <option value="admin">Administrador</option>
                             </select>
                           </td>
-                          <td className="py-3 px-3 text-center">
+                          <td className="py-3 px-3 text-center flex items-center justify-center gap-2">
                             <button
                               onClick={() => handleResetPassword(u._id, u.nombre)}
                               title="Restablecer contraseña a los primeros 4 dígitos del RUT"
@@ -329,6 +344,14 @@ export default function Dashboard() {
                             >
                               <KeyRound className="h-3.5 w-3.5" />
                               <span>Reset Clave</span>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteUser(u._id, u.nombre)}
+                              title="Eliminar usuario"
+                              className="inline-flex items-center gap-1 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                              <span>Eliminar</span>
                             </button>
                           </td>
                         </tr>
