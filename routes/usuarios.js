@@ -82,5 +82,20 @@ router.put('/:id/reset-password', async (req, res) => {
     res.status(500).json({ message: 'Error al restablecer la contraseña', error: err.message });
   }
 });
+// 5. Eliminar un usuario por ID (Panel de Admin)
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: 'Usuario no encontrado en la base de datos.' });
+    }
+
+    res.json({ message: '¡Usuario eliminado exitosamente!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error en el servidor al eliminar el usuario', error: error.message });
+  }
+});
 
 module.exports = router;
